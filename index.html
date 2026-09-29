@@ -1,0 +1,619 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Chris Williams — Composer</title>
+  <meta name="description" content="Chris Williams — composer and researcher. Teaching statement, CV, and creative portfolio." />
+  <style>
+    /* =========================================================
+       1. TOKENS
+       ========================================================= */
+    :root {
+      --bg: #000;
+      --fg: #f2f2f2;
+      --muted: #999;
+      --rule: #333;
+      --link: #fff;
+      --link-hover: #c2c2c2;
+      --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+      --font-serif: Georgia, "Times New Roman", serif;
+      --max-width: 860px;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--fg);
+      font-family: var(--font-sans);
+      font-size: 1.05rem;
+      line-height: 1.65;
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .wrap {
+      max-width: var(--max-width);
+      margin: 0 auto;
+      padding: 3rem 1.5rem 4rem;
+    }
+
+    a {
+      color: var(--link);
+      text-decoration: none;
+      border-bottom: 1px solid var(--muted);
+      transition: color .2s ease, border-color .2s ease;
+    }
+    a:hover, a:focus { color: var(--link-hover); border-color: var(--link-hover); }
+    a:focus-visible { outline: 2px solid #aaa; outline-offset: 2px; }
+
+    nav li { position: relative; }
+
+.droplabel {
+  cursor: default;
+  font-size: .95rem;
+  letter-spacing: .04em;
+  color: var(--muted);
+  transition: color .2s ease;
+}
+.dropdown:hover .droplabel,
+.dropdown:focus-within .droplabel { color: var(--fg); }
+
+.dropdown-menu {
+  display: none;
+  position: absolute;
+  top: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  margin: 0;
+  padding: .9rem 0 0;   /* keeps hover alive across the gap */
+  list-style: none;
+  background: var(--bg);
+  z-index: 10;
+}
+.dropdown:hover .dropdown-menu,
+.dropdown:focus-within .dropdown-menu { display: block; }
+
+.dropdown-menu a {
+  display: block;
+  padding: .3rem .8rem;
+  font-size: .9rem;
+  color: var(--muted);
+  border-bottom: none;
+  white-space: nowrap;
+  transition: color .2s ease;
+}
+.dropdown-menu a:hover,
+.dropdown-menu a:focus { color: var(--fg); }
+
+    h1, h2, h3 { font-family: var(--font-serif); font-weight: 400; }
+
+    /* =========================================================
+       2. MASTHEAD + TAB NAVIGATION
+       CSS-only tabs: the radio inputs live at the top of <body>,
+       so they can target panels further down via the ~ combinator.
+       No JavaScript required.
+       ========================================================= */
+    .tabstate {
+      position: absolute;
+      width: 1px; height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+
+    .masthead {
+      text-align: center;
+      padding-bottom: 1.5rem;
+      border-bottom: 1px solid var(--rule);
+      margin-bottom: 2.5rem;
+    }
+
+    .sitename {
+      font-size: 1.9rem;
+      letter-spacing: .5px;
+      margin: 0 0 .25rem;
+    }
+
+    .tagline {
+      color: var(--muted);
+      font-size: .95rem;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin: 0 0 1.5rem;
+    }
+
+    nav ul {
+      list-style: none;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: .4rem 2rem;
+      margin: 0;
+      padding: 0;
+    }
+
+    nav label {
+      cursor: pointer;
+      font-size: .95rem;
+      letter-spacing: .04em;
+      color: var(--muted);
+      border-bottom: 1px solid transparent;
+      padding-bottom: 2px;
+      transition: color .2s ease, border-color .2s ease;
+    }
+    nav label:hover { color: var(--fg); }
+
+    /* active tab */
+    #t-home:checked     ~ .wrap label[for="t-home"],
+    #t-teaching:checked ~ .wrap label[for="t-teaching"],
+    #t-cv:checked       ~ .wrap label[for="t-cv"],
+    
+    #t-work:checked     ~ .wrap label[for="t-work"] {
+      color: var(--fg);
+      border-bottom-color: var(--fg);
+    }
+
+    /* keyboard focus ring on the label when its hidden radio is focused */
+    .tabstate:focus-visible ~ .wrap label[for="t-home"],
+    .tabstate:focus-visible ~ .wrap label[for="t-teaching"],
+    .tabstate:focus-visible ~ .wrap label[for="t-cv"],
+    .tabstate:focus-visible ~ .wrap label[for="t-work"] { outline: 2px solid #aaa; outline-offset: 3px; }
+
+    /* panel switching */
+    .panel { display: none; animation: fadein .6s ease; }
+    #t-home:checked     ~ .wrap #p-home,
+    #t-teaching:checked ~ .wrap #p-teaching,
+    #t-cv:checked       ~ .wrap #p-cv,
+    #t-work:checked     ~ .wrap #p-work { display: block; }
+
+    /* =========================================================
+       3. HOME
+       ========================================================= */
+    .intro {
+      display: flex;
+      gap: 2.5rem;
+      align-items: flex-start;
+    }
+
+    .headshot {
+      flex: 0 0 240px;
+      width: 240px;
+      height: auto;
+      display: block;
+      filter: grayscale(15%);
+    }
+
+    .intro-body h2 { margin-top: 0; font-size: 1.5rem; }
+
+    .contact {
+      margin-top: 1.75rem;
+      font-size: .95rem;
+      color: var(--muted);
+    }
+    .contact a { color: var(--fg); }
+
+    /* =========================================================
+       4. SHARED TYPOGRAPHY
+       ========================================================= */
+    h2.section {
+      font-size: 1.5rem;
+      margin: 0 0 1.5rem;
+      padding-bottom: .5rem;
+      border-bottom: 1px solid var(--rule);
+    }
+
+    h3 { font-size: 1.15rem; margin: 2.5rem 0 .2rem; }
+
+    .meta {
+      color: var(--muted);
+      font-size: .9rem;
+      letter-spacing: .02em;
+      margin: 0 0 .6rem;
+    }
+
+    .links { font-size: .9rem; margin: .4rem 0 1rem; }
+
+    .statement { margin: 1rem 0 0; }
+
+    .lede { font-size: 1.15rem; }
+
+    hr { border: none; border-top: 1px solid var(--rule); margin: 3rem 0; }
+
+    /* CV */
+    .cv-group { margin-bottom: 2rem; }
+    .cv-group h3 {
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: .1em;
+      font-family: var(--font-sans);
+      color: var(--muted);
+      margin: 2rem 0 .75rem;
+    }
+    .cv-entry { margin-bottom: 1rem; }
+    .cv-entry .when { color: var(--muted); font-size: .9rem; }
+
+    .download {
+      display: inline-block;
+      margin-top: 1rem;
+      padding: .55rem 1.1rem;
+      border: 1px solid var(--muted);
+      font-size: .9rem;
+      letter-spacing: .04em;
+    }
+    .download:hover { border-color: var(--fg); }
+
+    /* =========================================================
+       5. MEDIA EMBEDS
+       ========================================================= */
+    .media {
+      margin: 1.25rem 0;
+      background: #111;
+    }
+
+    .video {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 16 / 9;
+    }
+    .video iframe {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+
+    .sc-embed { width: 100%; height: 120px; border: none; display: block; }
+
+    audio { width: 100%; display: block; margin: 1rem 0; }
+
+    /* =========================================================
+       6. FOOTER + MOTION + RESPONSIVE
+       ========================================================= */
+    footer {
+      margin-top: 4rem;
+      padding-top: 1.25rem;
+      border-top: 1px solid var(--rule);
+      color: var(--muted);
+      font-size: .875rem;
+      text-align: center;
+    }
+    footer a { color: var(--muted); }
+
+    @keyframes fadein {
+      from { opacity: 0; transform: translateY(10px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .panel { animation: none; }
+    }
+
+    @media (max-width: 640px) {
+      .wrap { padding-top: 2rem; }
+      .sitename { font-size: 1.5rem; }
+      .intro { flex-direction: column; align-items: center; text-align: center; }
+      .headshot { flex-basis: auto; width: 200px; }
+      nav ul { gap: .4rem 1.25rem; }
+      .dropdown-menu {
+  display: block;
+  position: static;
+  transform: none;
+  padding: .5rem 0 0;
+}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Tab state. Must stay here, immediately inside <body>, before .wrap. -->
+  <input class="tabstate" type="radio" name="tab" id="t-home" checked>
+  <input class="tabstate" type="radio" name="tab" id="t-teaching">
+  <input class="tabstate" type="radio" name="tab" id="t-cv">
+  <input class="tabstate" type="radio" name="tab" id="t-work">
+
+  <div class="wrap">
+
+    <header class="masthead">
+      <h1 class="sitename">Chris Williams</h1>
+      <p class="tagline">Composer · Researcher · Teacher</p>
+      <nav>
+        <ul>
+          <li><label for="t-home">Home</label></li>
+          <li><label for="t-teaching">Teaching Statement</label></li>
+          <li><label for="t-cv">CV</label></li>
+          <li class="dropdown">
+  <span class="droplabel">Digital Teaching Tools</span>
+  <ul class="dropdown-menu">
+    <li><a href="https://fatromistastic.github.io/timbralaxis/" target="_blank" rel="noopener noreferrer">Timbral Axis — Conceptual Space</a></li>
+    <li><a href="https://fatromistastic.github.io/musicdemos/" target="_blank" rel="noopener noreferrer">Vibrational Modes of a Plate</a></li>
+    <li><a href="https://fatromistastic.github.io/imageandsound/" target="_blank" rel="noopener noreferrer">Turn an Image into Sound</a></li>
+  </ul>
+</li>
+          <li><label for="t-work">Creative Portfolio</label></li>
+        </ul>
+      </nav>
+    </header>
+
+    <main>
+
+      <!-- ===================== HOME ===================== -->
+      <section class="panel" id="p-home">
+        <div class="intro">
+          <img class="headshot" src="teachingheadshot.jpeg"
+               alt="Portrait of Chris Williams" width="240" height="300">
+          <div class="intro-body">
+            <h2>Chris Williams</h2>
+            <p class="meta">Duke University · |Julian Price Fellow 2025-26|
+</p>
+            <p class="meta">|Bass Instructor of Record Teaching Fellow, Fall 2026|</p>
+            <p class="lede">
+              I am a composer, teacher, and researcher, studying the musical tropes of mathematics 
+              and mysticism through overlapping compositional, cultural-historical, and music-theoretical approaches.
+            </p>
+            <p>
+              My work often involves the exploration of new technology and the history ideas for musical purposes. Recent 
+              work has deployed novel computational methods to harmonic visualisation and analysis, the creative exploration 
+              of machine learning as well as the critical and ethical approach to AI. My work incudes, but is not limited to, generative 
+              and algorithmic composition. 
+            </p>
+            <div class="contact">
+              <p>
+                <a href="mailto:chris@chriswilliamscomposer.com">chris@chriswilliamscomposer.com</a><br>
+                [ORCID ID: 0009-0004-9089-4921 / www.chriswilliamscomposer.com]
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- ================ TEACHING STATEMENT ================ -->
+      <section class="panel" id="p-teaching">
+        <h2 class="section">Teaching Statement</h2>
+
+        <p class="lede">
+          My teaching is grounded in curiosity, clarity, and care. Whether in theory, analysis, or composition, 
+          I want students to experience music as something that belongs to them: a medium through which to think, 
+          to make, and to connect. Teaching, for me, is a creative act—an extension of the same processes 
+          of exploration and reflection that animate my composition and research. 
+          I aim to model a balance of intellectual rigor and imaginative freedom, 
+          encouraging students to approach music as an integral part of the wider tapestry of human inquiry: 
+          literature, philosophy, history, mathematics, and science.
+        </p>
+
+        <p>
+          At Duke I have designed and delivered courses both independently and collaboratively, 
+          developed and graded assessments, and led lessons and courses. 
+          I have taught <i>I have taught Music 161: Introduction to Music Theory</i>, 
+          <i>Music 261L: Theory and Practice of Tonal Music</i>, and 
+          <i>Music 273S: Introduction to Electronic Music Composition</i> as instructor of record, 
+          contributed significant guest lectures to <i></i>Nineteenth-Century Music</i> and 
+        <i>Musical Shakespeare</i>, and twice assisted in the <i>Introduction to Electronic Music course</i>.
+        </p>
+
+        <p>
+          I use backward course design, beginning with learning goals and objectives, 
+          then planning meaningful assessments and activities that support them. 
+          I regard each syllabus I have written as a living document, revised through reflection, 
+          classroom experience, and peer observation. I emphasize transparency and accessibility—clear expectations, 
+          inclusive content, and diverse learning resources. For example, in Music 161 
+          I introduced scaffolding strategies for new learners and redesigned 
+          assessments to make the rationale for each assignment explicit. 
+          For my own syllabus, <i>Songs of the Earth: Music in a Time of Climate Crisis</i>, I 
+          combined creative and critical approaches to the climate crisis 
+          but upon reflection and discussion with a senior colleague diversified the content covered 
+          to improve representation across the course.
+        </p>
+
+        <p>
+         Active learning underpins my teaching. In <i>Music 261L</i> I used “one-minute papers” to 
+          identify shared challenges and shape future lessons. 
+          In Music <i>161</i> an anonymous online portal allowed students 
+          to submit questions before the midterm, while a collaborative 
+          playlist assignment encouraged stylistic diversity and peer 
+          discussion around identity and genre. 
+          In a guest lecture on Schumann’s Dichterliebe, 
+          students drew poems from a “lucky dip,” imagined their own settings, 
+          and then compared them to Schumann’s—an approach blending history, 
+          imagination, and collective reflection.
+        </p>
+
+        <p>
+        I see feedback as central to learning, not an afterthought, 
+        balancing formative and summative assessment, peer review, drafts, 
+        and dialogue to scaffold growth. 
+        My feedback is timely, selective, and specific. 
+        Anonymous course evaluations note that I am “very engaging and ready to work with” students 
+        and that “the way Chris helped us practice for specific skills was exceptional.”
+          </p>
+
+        <p>
+            Teaching is, finally, a reciprocal act. My students’ development and my own are 
+          intertwined; reflection, feedback, and professional learning continually reshape my practice. 
+          I aim to create classrooms where curiosity, creativity, and intellectual openness 
+          thrive—values that produce and contribute to a vibrant, collaborative musical community.
+
+             </p>
+
+        <a class="download" href="teaching-statement.pdf" target="_blank" rel="noopener noreferrer">
+          Full statement (PDF)
+        </a>
+      </section>
+
+      <!-- ===================== CV ===================== -->
+      <section class="panel" id="p-cv">
+        <h2 class="section">Curriculum Vitae</h2>
+
+        <a class="download" href="ChrisWilliams_CV.pdf" target="_blank" rel="noopener noreferrer">
+          Download full CV (PDF)
+        </a>
+
+        <div class="cv-group">
+          <h3>Education</h3>
+          <div class="cv-entry">
+            <div>PhD (Music, Composition), Duke University</div>
+            <div class="when">Expected Dec 2026 ·
+              <br>Dissertation: "Abundance and Reduction: <br>'Between Visible and Hidden Worlds'" (Composition and Music Theory) ·
+              <br>Supervisors: John Supko and Scott Lindroth ·</div>
+          </div>
+          <div class="cv-entry">
+            <div>MPhil (Music, Composition), University of Oxford</div>
+            <div class="when">2013 · 
+            <br>Thesis: “Consummating the Symbol: Authorial agency in the construction of musical
+ meaning”<br>(supervised by Prof. Peter Franklin) ·<br>Composition Supervisor: Robert Saxton ·</div>
+          </div>
+          <div class="cv-entry">
+            <div>Bmus (Composition) · First-Class Honours, Sydney Conservatorium of Music</div>
+            <div class="when">2009 ·
+            <br>Honours Thesis : “Nigel Butterley and the elusive line : 
+            <br>pitch and voice-leading procedures in the vocal music of Nigel Butterley.</div>
+          </div>
+        </div>
+      </section>
+      <!-- ================ CREATIVE PORTFOLIO ================ -->
+      <section class="panel" id="p-work">
+        <h2 class="section">Creative Portfolio</h2>
+
+        <!-- I. Acoustic -->
+        <h3 style="font-size:1.35rem; margin-top:0;">I. Acoustic Works</h3>
+
+        <article>
+          <h3>1. <em>Beyond what is visible, is what is</em></h3>
+          <p class="meta">~4.5 mins — Orchestra</p>
+          <p class="links">
+            <a href="scores/beyond.pdf" target="_blank" rel="noopener noreferrer">Score (PDF)</a> ·
+            <a href="https://www.dropbox.com/scl/fi/pci9huwvos0k68n6u03ks/Beyondwhatsvisible.mp3?rlkey=hfu1j78qhq1xm8tef7p9kilb0&amp;st=k9i61oj6&amp;dl=0" target="_blank" rel="noopener noreferrer">Recording</a>
+          </p>
+          <p class="statement">
+            This work emerges from an ongoing textual experiment: a digital corpus of
+            &lsquo;visionary and prophetic&rsquo; texts spanning millennia and cultures — from the
+            Babylonian <em>Astronomical Diaries</em> and the <em>Book of Traversing Eternity</em>
+            to Nostradamus and Blake. I trained a rudimentary large language model (LLM) on
+            this corpus to become a kind of Post-Information-Age oracle, exploring how a
+            definitionally &lsquo;superhuman&rsquo; system might refract the profoundly human
+            impulse toward prophecy. Part of a larger <em>chresmology</em> (a collection of
+            prophecies) for orchestra, each movement responds to the model&rsquo;s first
+            utterances. This movement further excavates the cultural past through the collision
+            of heavily transformed musical fragments: Barber, Messiaen, Mahler, and even
+            transcriptions of wind chimes haunt its surface.
+          </p>
+        </article>
+
+        <article>
+          <h3>2. <em>The true ceremony of the sun: String Quartet no. 1</em></h3>
+          <p class="meta">~16 mins — String Quartet</p>
+          <p class="links">
+            <a href="scores/2.ChrisWilliams_Trueceremony.pdf" target="_blank" rel="noopener noreferrer">Score (PDF)</a> ·
+            <a href="https://www.dropbox.com/scl/fi/hsjiired41u15itoiv372/2.ChrisWilliams_True-Ceremony-of-the-Sun.mp3?rlkey=qblg4e3lzn1qipb4ifha4at2d&amp;st=nygzbqq2&amp;dl=0" target="_blank" rel="noopener noreferrer">Recording</a>
+          </p>
+          <p class="statement">
+            The opening movement of this quartet examines the tension between voice-leading
+            strategies and harmonic result, using small, continuous motions between pitch
+            classes to create richly variegated harmonic surfaces. The work thus serves as an
+            early demonstration of the compositional ideas later formalised in my theoretical
+            research on harmonic qualia and the DFT. The piece unfolds as a series of cycles
+            within cycles. The first and last movements are more connected to one another than
+            the middle, and all three movements unfold in three parts, so that we are
+            perpetually in motion, always returning to the beginning again.
+          </p>
+        </article>
+
+        <article>
+          <h3>3. <em>Ave Regina caelorum</em></h3>
+          <p class="meta">~7 mins — SSAATTBB vocal ensemble</p>
+          <p class="links">
+            <a href="scores/9.ChrisWilliams_Ave_Regina_ChrisWilliams_Sep2.pdf" target="_blank" rel="noopener noreferrer">Score (PDF)</a>
+          </p>
+          <div class="media video">
+            <iframe src="https://www.youtube.com/embed/aKgo4p4cx2Y"
+                    title="Ave Regina caelorum — Chris Williams"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen></iframe>
+          </div>
+          <p class="statement">
+            In addition to a Marian antiphon, at the very end of this piece I have inserted a
+            fragment of a very different, though thematically related, text, by G. K. Chesterton
+            (1874–1936). For me, it serves to suddenly bring the Latin, and so the antiquated
+            Marian adoration, to life in an immediate and palpable way, before the final
+            farewell. As at a few points in the piece, this is a final glimmer of intensity
+            before the close of day — the Compline (or &lsquo;Night Prayer&rsquo;) — from which
+            the antiphon comes.
+          </p>
+        </article>
+
+        <hr>
+
+        <!-- II. Electronic -->
+        <h3 style="font-size:1.35rem;">II. Electronic / Algorithmic Works</h3>
+
+        <article>
+          <h3>1. <em>Trinomial Overshot 11</em></h3>
+          <p class="meta">~3 mins — Fixed media / electronic · no score</p>
+          <div class="media">
+            <iframe class="sc-embed"
+                    src="https://w.soundcloud.com/player/?url=https%3A//soundcloud.com/chriswilliamscomposer/trinomial-overshot-11&amp;color=%23ffffff&amp;inverse=false&amp;auto_play=false&amp;show_user=false"
+                    title="Trinomial Overshot 11 — SoundCloud player"
+                    loading="lazy"
+                    scrolling="no"
+                    allow="autoplay"></iframe>
+          </div>
+          <p class="links">
+            <a href="https://soundcloud.com/chriswilliamscomposer/trinomial-overshot-11" target="_blank" rel="noopener noreferrer">Listen on SoundCloud</a>
+          </p>
+          <p class="statement">
+            <em>Trinomial Overshot 11</em> seeks to forge a new and distinct relationship to
+            &ldquo;the grid&rdquo; and to periodicity itself. Inspired by the unusual weaving
+            patterns devised by American weaver Ada Dietz, I wrote an algorithm combining
+            OpenMusic and Common Lisp that generates and allows me to audition stochastic,
+            hierarchical patterns of irregular pulse duration. This piece is built entirely
+            around five such rhythms, each of eleven pulses, colliding with additional aleatoric
+            elements. The title, <em>Trinomial Overshot 11</em>, refers to Ada Dietz&rsquo;s own
+            beautiful tapestry of the same name.
+          </p>
+        </article>
+
+        <hr>
+
+        <!-- III. Film -->
+        <h3 style="font-size:1.35rem;">III. Film / Applied Music</h3>
+
+        <article>
+          <h3>1. <em>Prometheus</em> opening credits (re-score)</h3>
+          <p class="meta">~5 mins — Film score · video only</p>
+          <div class="media video">
+            <iframe src="https://www.youtube.com/embed/dNd5Dx8Ix-Q?si=cP2YabCRcitbytPj"
+                    title="Prometheus opening credits — re-score by Chris Williams"
+                    loading="lazy"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    referrerpolicy="strict-origin-when-cross-origin"
+                    allowfullscreen></iframe>
+          </div>
+          <p class="statement">
+            This video presents my original re-scoring of the opening sequence from
+            <em>Prometheus</em>, performed by the ORT – Orchestra della Toscana under the
+            direction of Hollywood conductor Pete Anthony, at the Teatro Verdi in Florence. For
+            this score, I received the <strong>Best Orchestration</strong> award in the Chigiana
+            Film Scoring Program, a course selected and taught by members of the USC Thornton
+            Screen Scoring faculty — including Patrick Kirst and Lawrence Shragge — one of the
+            world&rsquo;s leading programs for composition in visual media.
+          </p>
+          <p class="meta">
+            For rights reasons, excerpts from the original film appear only briefly in this footage.
+          </p>
+        </article>
+      </section>
+
+    </main>
+
+    <footer>
+      <p>© Chris Williams 2026 ·
+        <a href="mailto:chris@chriswilliamscomposer.com">chris[@]chriswilliamscomposer.com</a>
+      </p>
+    </footer>
+
+  </div>
+</body>
+</html>
